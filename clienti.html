@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html>
+<head><title>Clienti</title></head>
+<body>
+    <h1>Tabella Clienti</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th><th>Sesso</th><th>Nome</th><th>Cognome</th><th>Città</th>
+            <th>Telefono</th><th>Articolo</th><th>Quantità</th>
+        </tr>
+        {% for c in clienti %}
+        <tr>
+            <td>{{ c.ID }}</td><td>{{ c.sesso }}</td><td>{{ c.nome }}</td><td>{{ c.cognome }}</td>
+            <td>{{ c.citta }}</td><td>{{ c.telefono }}</td><td>{{ c.articolo }}</td><td>{{ c.quantita }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><a href="/">Torna alla Home</a></p>
+</body>
+</html>
