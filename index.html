@@ -1,0 +1,28 @@
+<div id="benvenuto" style="font-size: 1.5em; margin: 20px 0; font-family: sans-serif;"></div>
+
+<script>
+    // Frasi aggiuntive
+    const frasiAggiuntive = [
+        "Grazie per aver visitato il nostro sito.",
+        "Speriamo che tu abbia una splendida giornata.",
+        "Contattaci per qualsiasi informazione.",
+        "Scopri le ultime novità sul nostro sito.",
+        "Prosegue la sperimentazione di nuove script."
+    ];
+
+    // Funzione per ottenere la data formattata
+    function getDataOggi() {
+        const oggi = new Date();
+        const opzioni = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        return oggi.toLocaleDateString('it-IT', opzioni);
+    }
+
+    // Scegli una frase aggiuntiva casuale
+    function getFraseCasuale() {
+        const indice = Math.floor(Math.random() * frasiAggiuntive.length);
+        return frasiAggiuntive[indice];
+    }
+
+    // Scrive il messaggio di benvenuto con frase aggiuntiva
+    document.getElementById('benvenuto').innerText =
+        `Benvenuto! Oggi è ${getDataOggi()}.\n${getFraseCasuale()}`;
