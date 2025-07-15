@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Benvenuto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 100px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        .datetime {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Benvenuto nella mia pagina!</h1>
+    <div class="datetime">
+        <div id="data"></div>
+        <div id="ora"></div>
+    </div>
+
+    <script>
+        function aggiornaDataEOra() {
+            const now = new Date();
+
+            const opzioniData = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+
+            const data = now.toLocaleDateString('it-IT', opzioniData);
+            const ora = now.toLocaleTimeString('it-IT');
+
+            document.getElementById('data').textContent = `Data: ${data}`;
+            document.getElementById('ora').textContent = `Ora: ${ora}`;
+        }
+
+        // Aggiorna subito e poi ogni secondo
+        aggiornaDataEOra();
+        setInterval(aggiornaDataEOra, 1000);
+    </script>
+</body>
+</html>
