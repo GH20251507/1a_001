@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Black Board - Tabella</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1c1c1c;
+            color: white;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00ccff;
+        }
+
+        .btn-home {
+            background-color: #00ccff;
+            color: black;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .btn-home:hover {
+            background-color: #0099cc;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1em;
+        }
+
+        button[type="submit"], button[type="button"] {
+            padding: 12px;
+            font-size: 1em;
+            background-color: #00ccff;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button[type="submit"]:hover,
+        button[type="button"]:hover {
+            background-color: #0099cc;
+        }
+
+        .form-buttons {
+            grid-column: span 3;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        th {
+            background-color: #333;
+        }
+
+        td {
+            background-color: #222;
+        }
+
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tabella - Black Board</h1>
+
+    <div class="center">
+        <button onclick="location.href='index.html'" class="btn-home">Torna alla Home</button>
+    </div>
+
+    <form id="datiForm">
+        <input type="number" id="id" placeholder="ID (obbligatorio)" required />
+        <input type="text" id="nome" placeholder="Nome" />
+        <input type="text" id="citta" placeholder="Città" />
+        <input type="number" id="telefono" placeholder="Telefono" />
+        <input type="text" id="articolo" placeholder="Articolo" />
+        <input type="number" id="quantita" placeholder="Quantità" />
+        <div class="form-buttons">
+            <button type="submit">Inserisci</button>
+            <button type="button" onclick="aggiornaDato()">Aggiorna</button>
+        </div>
+    </form>
+
+    <table id="tabella">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Città</th>
+                <th>Telefono</th>
+                <th>Articolo</th>
+                <th>Quantità</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dati verranno caricati qui -->
+        </tbody>
+    </table>
+
+    <script>
+        const form = document.getElementById('datiForm');
+        const tabella = document.getElementById('tabella').getElementsByTagName('tbody')[0];
+
+        // Carica dati dal localStorage all'avvio
+        window.addEventListener('load', () => {
+            const datiSalvati = JSON.parse(localStorage.getItem('datiTabella')) || [];
+            datiSalvati.forEach(dato => aggiungiRiga(dato));
+        });
+
+        // Aggiungi una riga alla tabella
+        function aggiungiRiga(dato) {
+            const riga = tabella.insertRow();
+            riga.insertCell().textContent = dato.id;
+            riga.insertCell().textContent = dato.nome;
+            riga.insertCell().textContent = dato.citta;
+            riga.insertCell().textContent = dato.telefono;
+            riga.insertCell().textContent = dato.articolo;
+            riga.insertCell().textContent = dato.quantita;
+        }
+
+        // Gestione inserimento dati
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const id = document.getElementById('id').value.trim();
+            const nome = document.getElementById('nome').value.trim();
+            const citta = document.getElementById('citta').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const articolo = document.getElementById('articolo').value.trim();
+            const quantita = document.getElementById('quantita').value.trim();
+
+            if (id === '') {
+                alert('Il campo ID è obbligatorio.');
+                return;
+            }
+
+            const nuovoDato = { id, nome, citta, telefono, articolo, quantita };
+
+            // Controlla se ID esiste già
+            let dati = JSON.parse(localStorage.getItem('datiTabella')) || [];
+            if (dati.some(item => item.id === id)) {
+                alert('ID già esistente. Usa "Aggiorna" per modificarlo.');
+                return;
+            }
+
+            dati.push(nuovoDato);
+            localStorage.setItem('datiTabella', JSON.stringify(dati));
+            aggiungiRiga(nuovoDato);
+            form.reset();
+        });
+
+        // Funzione per aggiornare un record esistente
+        function aggiornaDato() {
+            const id = document.getElementById('id').value.trim();
+            const nome = document.getElementById('nome').value.trim();
+            const citta = document.getElementById('citta').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const articolo = document.getElementById('articolo').value.trim();
+            const quantita = document.getElementById('quantita').value.trim();
+
+            if (id === '') {
+                alert('Inserisci un ID da aggiornare.');
+                return;
+            }
+
+            let dati = JSON.parse(localStorage.getItem('datiTabella')) || [];
+            const index = dati.findIndex(item => item.id === id);
+            if (index === -1) {
+                alert('ID non trovato.');
+                return;
+            }
+
+            dati[index] = { id, nome, citta, telefono, articolo, quantita };
+            localStorage.setItem('datiTabella', JSON.stringify(dati));
+
+            // Aggiorna tabella
+            tabella.innerHTML = '';
+            dati.forEach(d => aggiungiRiga(d));
+
+            alert('Dato aggiornato.');
+            form.reset();
+        }
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BB - Selezione ID</title>
+</head>
+<body>
+  <h2>Seleziona un ID</h2>
+
+  <select id="idSelect">
+    <option value="1">ID 1</option>
+    <option value="2">ID 2</option>
+    <option value="3">ID 3</option>
+    <!-- Aggiungi altri ID -->
+  </select>
+
+  <button onclick="vaiAId()">Vai a ID</button>
+
+  <script>
+    function vaiAId() {
+      const id = document.getElementById("idSelect").value;
+      window.location.href = `ID_cerca.html?id=${id}`;
+    }
+  </script>
+</body>
+</html>
